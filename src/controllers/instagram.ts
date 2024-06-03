@@ -6,7 +6,7 @@ import { getUserIdFromToken } from "../utils/utils";
 
 const INSTAGRAM_CLIENT_ID = process.env.INSTAGRAM_CLIENT_ID || "";
 const INSTAGRAM_CLIENT_SECRET = process.env.INSTAGRAM_CLIENT_SECRET || "";
-const REDIRECT_URI = "http://127.0.0.1:5000/api/instagram/callback";
+const REDIRECT_URI = "https://express-supabase-social-oauth.vercel.app/api/instagram/callback";
 const SCOPES = ["user_profile", "user_media"].join(" ");
 
 export const requestInstagramAuth = (req: Request, res: Response) => {

@@ -17,7 +17,7 @@ export const signup = async (req: Request, res: Response) => {
       await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: "http://localhost:5173/login",
+          emailRedirectTo: "https://vite-vue-topaz-one.vercel.app/login",
         },
       });
 
@@ -40,7 +40,7 @@ export const signin = async (req: Request, res: Response) => {
         email,
         options: {
           shouldCreateUser: false,
-          emailRedirectTo: "http://localhost:5173/profile",
+          emailRedirectTo: "https://vite-vue-topaz-one.vercel.app/profile",
         },
       });
 

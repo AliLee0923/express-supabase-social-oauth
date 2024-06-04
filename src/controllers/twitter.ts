@@ -8,7 +8,7 @@ import { getUserIdFromToken } from "../utils/utils";
 
 const API_KEY = process.env.TWITTER_API_KEY || "";
 const API_SECRET_KEY = process.env.TWITTER_API_SECRET_KEY || "";
-const CALLBACK_URL = "http://127.0.0.1:5000/api/twitter/callback";
+const CALLBACK_URL = "https://express-supabase-social-oauth.vercel.app/api/twitter/callback";
 
 const oauth = new OAuth({
   consumer: {

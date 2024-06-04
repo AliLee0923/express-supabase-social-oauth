@@ -6,7 +6,7 @@ import { getUserIdFromToken } from "../utils/utils";
 
 const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_ID || "";
 const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET || "";
-const LINKEDIN_REDIRECT_URI = "http://127.0.0.1:5000/api/linkedin/callback";
+const LINKEDIN_REDIRECT_URI = "https://express-supabase-social-oauth.vercel.app/api/linkedin/callback";
 const LINKEDIN_SCOPES = ["profile", "email"].join(" ");
 
 export const requestLinkedInAuth = (req: Request, res: Response) => {

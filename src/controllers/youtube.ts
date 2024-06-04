@@ -81,7 +81,7 @@ export const handleCallback = async (req: Request, res: Response) => {
     // You should save these tokens in your database
     // For now, we'll just redirect to the frontend with the tokens as query params
     res.redirect(
-      `http://localhost:5173/profile`
+      `https://vite-vue-topaz-one.vercel.app/profile`
     );
   } catch (error: any) {
     res.status(500).send(error.toString());

@@ -122,7 +122,7 @@ export const handleCallback = async (req: Request, res: Response) => {
     }
 
     // Redirect to your frontend with the tokens (or store them in session, etc.)
-    res.redirect(`http://localhost:5173/profile`);
+    res.redirect(`https://vite-vue-topaz-one.vercel.app/profile`);
   } catch (error: any) {
     res.status(500).send(error.toString());
   }

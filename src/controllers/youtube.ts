@@ -7,7 +7,7 @@ import { getUserIdFromToken } from "../utils/utils";
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID || "";
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET || "";
 const REDIRECT_URI = "https://express-supabase-social-oauth.vercel.app/api/youtube/callback";
-const SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"].join(" ");
+const SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl"].join(" ");
 
 export const requestAuth = (req: Request, res: Response) => {
   const token = req.query.access_token as string;

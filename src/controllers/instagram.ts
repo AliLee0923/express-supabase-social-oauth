@@ -8,7 +8,7 @@ const INSTAGRAM_CLIENT_ID = process.env.INSTAGRAM_CLIENT_ID || "";
 const INSTAGRAM_CLIENT_SECRET = process.env.INSTAGRAM_CLIENT_SECRET || "";
 const REDIRECT_URI =
   "https://express-supabase-social-oauth.vercel.app/api/instagram/callback";
-const SCOPES = ["user_profile", "user_media"].join(" ");
+const SCOPES = ["user_profile", "user_media", "comments"].join(" ");
 
 export const requestInstagramAuth = (req: Request, res: Response) => {
   const token = req.query.access_token as string;

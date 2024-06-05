@@ -86,7 +86,7 @@ export const handleCallback = async (req: Request, res: Response) => {
 };
 
 export const postComment = async (req: Request, res: Response) => {
-  const { videoId, comment } = req.body;
+  const { postId, comment } = req.body;
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -117,12 +117,13 @@ export const postComment = async (req: Request, res: Response) => {
       "https://www.googleapis.com/youtube/v3/commentThreads",
       {
         snippet: {
-          videoId: videoId,
+          videoId: postId,
           topLevelComment: {
             snippet: {
               textOriginal: comment,
             },
           },
+          isPublic: true,
         },
       },
       {

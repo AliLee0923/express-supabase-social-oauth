@@ -16,3 +16,9 @@ export const extractMediaId = (url: string): string | null => {
   const match = url.match(regex);
   return match ? match[1] : null;
 };
+
+export const extractPostId = (url: string): string | null => {
+  const regex = /\/posts\/([a-zA-Z0-9_-]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+};

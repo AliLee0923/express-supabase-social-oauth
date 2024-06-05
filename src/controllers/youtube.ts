@@ -6,7 +6,8 @@ import { getUserIdFromToken } from "../utils/utils";
 
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID || "";
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET || "";
-const REDIRECT_URI = "https://express-supabase-social-oauth.vercel.app/api/youtube/callback";
+const REDIRECT_URI =
+  "https://express-supabase-social-oauth.vercel.app/api/youtube/callback";
 const SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl"].join(" ");
 
 export const requestAuth = (req: Request, res: Response) => {
@@ -61,18 +62,16 @@ export const handleCallback = async (req: Request, res: Response) => {
         client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET,
         redirect_uri: REDIRECT_URI,
-      }),
+      })
     );
 
     const { access_token, refresh_token } = response.data;
 
-    const { data, error } = await supabase
-      .from("youtube_tokens")
-      .upsert({
-        user_id: userId,
-        access_token: access_token,
-        refresh_token: refresh_token,
-      });
+    const { data, error } = await supabase.from("youtube_tokens").upsert({
+      user_id: userId,
+      access_token: access_token,
+      refresh_token: refresh_token,
+    });
 
     if (error) {
       throw new Error(error.message);
@@ -80,9 +79,61 @@ export const handleCallback = async (req: Request, res: Response) => {
 
     // You should save these tokens in your database
     // For now, we'll just redirect to the frontend with the tokens as query params
-    res.redirect(
-      `https://vite-vue-topaz-one.vercel.app/profile`
+    res.redirect(`https://vite-vue-topaz-one.vercel.app/profile`);
+  } catch (error: any) {
+    res.status(500).send(error.toString());
+  }
+};
+
+export const postComment = async (req: Request, res: Response) => {
+  const { videoId, comment } = req.body;
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  const token = authHeader.split(" ")[1];
+  const userId = getUserIdFromToken(token);
+
+  if (!userId) {
+    return res.status(401).send("Invalid token");
+  }
+
+  try {
+    const { data: tokenData, error: tokenError } = await supabase
+      .from("youtube_tokens")
+      .select("access_token")
+      .eq("user_id", userId)
+      .single();
+
+    if (tokenError) {
+      throw new Error(tokenError.message);
+    }
+
+    const accessToken = tokenData.access_token;
+
+    const response = await axios.post(
+      "https://www.googleapis.com/youtube/v3/commentThreads",
+      {
+        snippet: {
+          videoId: videoId,
+          topLevelComment: {
+            snippet: {
+              textOriginal: comment,
+            },
+          },
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
+
+    res.status(200).send(response.data);
   } catch (error: any) {
     res.status(500).send(error.toString());
   }

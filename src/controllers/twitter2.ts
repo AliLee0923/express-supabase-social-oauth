@@ -118,7 +118,6 @@ export const handleTwitterCallback = async (req: Request, res: Response) => {
 
 export const postTweet = async (req: Request, res: Response) => {
   const { comment, postId } = req.body;
-  const in_reply_to_tweet_id = postId;
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -154,7 +153,9 @@ export const postTweet = async (req: Request, res: Response) => {
       "https://api.twitter.com/2/tweets",
       {
         text: comment,
-        ...(in_reply_to_tweet_id && { in_reply_to_tweet_id }),
+        reply: {
+            in_reply_to_tweet_id: postId
+        },
       },
       {
         headers: {

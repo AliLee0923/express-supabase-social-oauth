@@ -37,7 +37,7 @@ export const initiateTwitterOAuth = (req: Request, res: Response) => {
     {
       response_type: "code",
       client_id: TWITTER_CLIENT_ID,
-      redirect_uri: TWITTER_REDIRECT_URI + "?token" + token,
+      redirect_uri: `${TWITTER_REDIRECT_URI}?token=${token}`,
       scope: "tweet.read tweet.write users.read offline.access",
       state: state,
       code_challenge: codeChallenge,

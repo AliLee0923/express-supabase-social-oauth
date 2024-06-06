@@ -71,18 +71,18 @@ export const handleLinkedInCallback = async (req: Request, res: Response) => {
     const { access_token } = response.data;
 
     // Fetch LinkedIn user ID
-    // const profileResponse = await axios.get("https://api.linkedin.com/v2/me", {
-    //   headers: {
-    //     Authorization: `Bearer ${access_token}`,
-    //   },
-    // });
+    const profileResponse = await axios.get("https://api.linkedin.com/v2/me", {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
 
-    // const linkedinUserId = profileResponse.data.id;
+    const linkedinUserId = profileResponse.data.id;
 
     const { data, error } = await supabase.from("linkedin_tokens").upsert({
       user_id: userId,
       access_token: access_token,
-      linkedin_user_id: "0b595611",
+      linkedin_user_id: linkedinUserId,
     });
 
     if (error) {

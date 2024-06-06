@@ -77,9 +77,12 @@ export const handleLinkedInCallback = async (req: Request, res: Response) => {
       },
     });
 
+    const linkedinUserId = profileResponse.data.id;
+
     const { data, error } = await supabase.from("linkedin_tokens").upsert({
       user_id: userId,
       access_token: access_token,
+      linkedin_user_id: linkedinUserId,
     });
 
     if (error) {

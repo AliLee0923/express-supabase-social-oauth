@@ -15,6 +15,7 @@ const sessionStore: { [key: string]: { codeVerifier: string; state: string } } =
   {};
 
 export const initiateTwitterOAuth = (req: Request, res: Response) => {
+  const token = req.query.access_token as string;
   const state = crypto.randomBytes(16).toString("hex");
   const codeVerifier = crypto.randomBytes(32).toString("hex");
   const codeChallenge = crypto
@@ -22,11 +23,21 @@ export const initiateTwitterOAuth = (req: Request, res: Response) => {
     .update(codeVerifier)
     .digest("base64url");
 
+  if (!token) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  const userId = getUserIdFromToken(token);
+
+  if (!userId) {
+    return res.status(401).send("Invalid token");
+  }
+
   const authUrl = `https://twitter.com/i/oauth2/authorize?${querystring.stringify(
     {
       response_type: "code",
       client_id: TWITTER_CLIENT_ID,
-      redirect_uri: TWITTER_REDIRECT_URI,
+      redirect_uri: TWITTER_REDIRECT_URI + "?token=" + token,
       scope: "tweet.read tweet.write users.read offline.access",
       state: state,
       code_challenge: codeChallenge,

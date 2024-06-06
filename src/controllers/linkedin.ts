@@ -8,7 +8,7 @@ const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_ID || "";
 const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET || "";
 const LINKEDIN_REDIRECT_URI =
   "https://express-supabase-social-oauth.vercel.app/api/linkedin/callback";
-const LINKEDIN_SCOPES = ["profile", "email", "openid", "w_member_social"].join(" ");
+const LINKEDIN_SCOPES = ["r_profile", "email", "openid", "w_member_social"].join(" ");
 
 export const requestLinkedInAuth = (req: Request, res: Response) => {
   const token = req.query.access_token as string;

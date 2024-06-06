@@ -188,7 +188,7 @@ export const postComment = async (req: Request, res: Response) => {
       {
         headers: {
           ...headers,
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
       }
     );

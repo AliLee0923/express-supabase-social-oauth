@@ -68,12 +68,18 @@ export const handleLinkedInCallback = async (req: Request, res: Response) => {
       }
     );
 
-    const { access_token, refresh_token } = response.data;
+    const access_token = response.data;
+
+    // Fetch LinkedIn user ID
+    const profileResponse = await axios.get("https://api.linkedin.com/v2/me", {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
 
     const { data, error } = await supabase.from("linkedin_tokens").upsert({
       user_id: userId,
       access_token: access_token,
-      refresh_token: refresh_token,
     });
 
     if (error) {

@@ -123,7 +123,6 @@ export const postComment = async (req: Request, res: Response) => {
               textOriginal: comment,
             },
           },
-          isPublic: true,
         },
       },
       {

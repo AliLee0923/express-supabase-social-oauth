@@ -8,7 +8,8 @@ import { getUserIdFromToken } from "../utils/utils";
 const TWITTER_CLIENT_ID = process.env.TWITTER_CLIENT_ID || "";
 const TWITTER_CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET || "";
 const TWITTER_REDIRECT_URI =
-  process.env.TWITTER_REDIRECT_URI || "https://express-supabase-social-oauth.vercel.app/api/twitter2/callback";
+  process.env.TWITTER_REDIRECT_URI ||
+  "https://express-supabase-social-oauth.vercel.app/api/twitter2/callback";
 
 const sessionStore: { [key: string]: { codeVerifier: string; state: string } } =
   {};
@@ -34,11 +35,12 @@ export const initiateTwitterOAuth = (req: Request, res: Response) => {
   )}`;
 
   sessionStore[state] = { codeVerifier, state };
-  res.redirect(authUrl)
+  //   res.redirect(authUrl)
+  res.json({ authUrl });
 };
 
 export const handleTwitterCallback = async (req: Request, res: Response) => {
-  const { code, state } = req.query;
+  const { code, state } = req.query as { code: string; state: string };
 
   if (!state || !code) {
     return res.status(400).send("Missing state or code");
@@ -59,7 +61,7 @@ export const handleTwitterCallback = async (req: Request, res: Response) => {
         grant_type: "authorization_code",
         client_id: TWITTER_CLIENT_ID,
         redirect_uri: TWITTER_REDIRECT_URI,
-        code: code as any,
+        code: code,
         code_verifier: codeVerifier,
       }),
       {
@@ -91,7 +93,7 @@ export const handleTwitterCallback = async (req: Request, res: Response) => {
       throw new Error(error.message);
     }
 
-    res.redirect(`https://your-frontend-app.com/profile`);
+    res.redirect(`https://vite-vue-topaz-one.vercel.app/profile`);
   } catch (error: any) {
     res.status(500).send(error.toString());
   } finally {

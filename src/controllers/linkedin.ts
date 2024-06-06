@@ -8,7 +8,7 @@ const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_ID || "";
 const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET || "";
 const LINKEDIN_REDIRECT_URI =
   "https://express-supabase-social-oauth.vercel.app/api/linkedin/callback";
-const LINKEDIN_SCOPES = ["r_profile", "email", "openid", "w_member_social"].join(" ");
+const LINKEDIN_SCOPES = ["profile", "email", "openid", "w_member_social"].join(" ");
 
 export const requestLinkedInAuth = (req: Request, res: Response) => {
   const token = req.query.access_token as string;
@@ -71,18 +71,18 @@ export const handleLinkedInCallback = async (req: Request, res: Response) => {
     const { access_token } = response.data;
 
     // Fetch LinkedIn user ID
-    const profileResponse = await axios.get("https://api.linkedin.com/v2/me", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+    // const profileResponse = await axios.get("https://api.linkedin.com/v2/me", {
+    //   headers: {
+    //     Authorization: `Bearer ${access_token}`,
+    //   },
+    // });
 
-    const linkedinUserId = profileResponse.data.id;
+    // const linkedinUserId = profileResponse.data.id;
 
     const { data, error } = await supabase.from("linkedin_tokens").upsert({
       user_id: userId,
       access_token: access_token,
-      linkedin_user_id: linkedinUserId,
+      linkedin_user_id: "linkedinUserId",
     });
 
     if (error) {

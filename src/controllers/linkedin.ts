@@ -68,7 +68,7 @@ export const handleLinkedInCallback = async (req: Request, res: Response) => {
       }
     );
 
-    const access_token = response.data;
+    const { access_token } = response.data;
 
     // Fetch LinkedIn user ID
     const profileResponse = await axios.get("https://api.linkedin.com/v2/me", {

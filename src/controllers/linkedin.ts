@@ -82,7 +82,7 @@ export const handleLinkedInCallback = async (req: Request, res: Response) => {
     const { data, error } = await supabase.from("linkedin_tokens").upsert({
       user_id: userId,
       access_token: access_token,
-      // linkedin_user_id: linkedinUserId,
+      linkedin_user_id: "0b595611",
     });
 
     if (error) {
@@ -114,7 +114,7 @@ export const postLinkedInComment = async (req: Request, res: Response) => {
 
   const { data, error } = await supabase
     .from("linkedin_tokens")
-    .select("access_token")
+    .select("access_token, linkedin_user_id")
     .eq("user_id", userId)
     .single();
 
@@ -123,7 +123,7 @@ export const postLinkedInComment = async (req: Request, res: Response) => {
     return res.status(500).send("Failed to fetch LinkedIn tokens");
   }
 
-  const accessToken = data.access_token;
+  const { access_token: accessToken, linkedin_user_id: linkedinUserId } = data;
 
   if (!postId || !comment || !accessToken) {
     return res.status(400).send("Missing required parameters");
@@ -133,7 +133,7 @@ export const postLinkedInComment = async (req: Request, res: Response) => {
     const response = await axios.post(
       `https://api.linkedin.com/v2/socialActions/${postId}/comments`,
       {
-        actor: `urn:li:person:${userId}`,
+        actor: `urn:li:person:${linkedinUserId}`,
         message: {
           text: comment,
         },

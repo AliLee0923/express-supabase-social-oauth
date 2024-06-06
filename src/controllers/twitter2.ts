@@ -52,7 +52,7 @@ export const initiateTwitterOAuth = (req: Request, res: Response) => {
 };
 
 export const handleTwitterCallback = async (req: Request, res: Response) => {
-  const { code, state } = req.query as { code: string; state: string };
+  const { code, state, token } = req.query as { code: string; state: string; token: string };
 
   if (!state || !code) {
     return res.status(400).send("Missing state or code");
@@ -87,7 +87,7 @@ export const handleTwitterCallback = async (req: Request, res: Response) => {
     );
 
     const { access_token, refresh_token, expires_in } = response.data;
-    const token = req.query.token as string;
+    // const token = req.query.token as string;
     const userId = getUserIdFromToken(token);
 
     if (!userId) {

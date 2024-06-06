@@ -5,8 +5,8 @@ import axios from "axios";
 import { supabase } from "../utils/supabase";
 import { getUserIdFromToken } from "../utils/utils";
 
-const TWITTER_CLIENT_ID = process.env.TWITTER_CLIENT_ID || "";
-const TWITTER_CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET || "";
+const TWITTER_CLIENT_ID = process.env.TWITTER_API_KEY || "";
+const TWITTER_CLIENT_SECRET = process.env.TWITTER_API_SECRET_KEY || "";
 const TWITTER_REDIRECT_URI =
   process.env.TWITTER_REDIRECT_URI ||
   "https://express-supabase-social-oauth.vercel.app/api/twitter2/callback";

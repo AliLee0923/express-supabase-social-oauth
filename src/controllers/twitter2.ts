@@ -11,8 +11,9 @@ const TWITTER_REDIRECT_URI =
   process.env.TWITTER_REDIRECT_URI ||
   "https://express-supabase-social-oauth.vercel.app/api/twitter2/callback";
 
-const sessionStore: { [key: string]: { codeVerifier: string; state: string } } =
-  {};
+const sessionStore: {
+  [key: string]: { codeVerifier: string; state: string; token: string };
+} = {};
 
 export const initiateTwitterOAuth = (req: Request, res: Response) => {
   const token = req.query.access_token as string;
@@ -45,13 +46,16 @@ export const initiateTwitterOAuth = (req: Request, res: Response) => {
     }
   )}`;
 
-  sessionStore[state] = { codeVerifier, state };
+  sessionStore[state] = { codeVerifier, state, token };
   //   res.redirect(authUrl)
   res.json({ authUrl });
 };
 
 export const handleTwitterCallback = async (req: Request, res: Response) => {
-  const { code, state, token } = req.query as { code: string; state: string; token: string };
+  const { code, state } = req.query as {
+    code: string;
+    state: string;
+  };
 
   if (!state || !code) {
     return res.status(400).send("Missing state or code");
@@ -63,7 +67,7 @@ export const handleTwitterCallback = async (req: Request, res: Response) => {
     return res.status(400).send("Invalid state");
   }
 
-  const { codeVerifier } = session;
+  const { codeVerifier, token } = session;
 
   try {
     const response = await axios.post(

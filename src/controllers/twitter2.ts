@@ -117,7 +117,8 @@ export const handleTwitterCallback = async (req: Request, res: Response) => {
 };
 
 export const postTweet = async (req: Request, res: Response) => {
-  const { comment, in_reply_to_tweet_id } = req.body;
+  const { comment, postId } = req.body;
+  const in_reply_to_tweet_id = postId;
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

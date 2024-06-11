@@ -152,15 +152,21 @@ export const postComment = async (req: Request, res: Response) => {
 
     const response = await axios.post(
       "https://www.googleapis.com/youtube/v3/commentThreads",
+      // {
+      //   snippet: {
+      //     videoId: postId,
+      //     topLevelComment: {
+      //       snippet: {
+      //         textOriginal: comment,
+      //       },
+      //     },
+      //   },
+      // },
       {
+        id: postId,
         snippet: {
-          videoId: postId,
-          topLevelComment: {
-            snippet: {
-              textOriginal: comment,
-            },
-          },
-        },
+          textOriginal: comment
+        }
       },
       {
         headers: {

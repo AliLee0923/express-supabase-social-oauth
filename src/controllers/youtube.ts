@@ -85,6 +85,43 @@ export const handleCallback = async (req: Request, res: Response) => {
   }
 };
 
+export const refreshAccessToken = async (userId: string) => {
+  try {
+    const { data: tokenData, error: tokenError } = await supabase
+      .from("youtube_tokens")
+      .select("refresh_token")
+      .eq("user_id", userId)
+      .single();
+
+    if (tokenError) {
+      throw new Error(tokenError.message);
+    }
+
+    const refreshToken = tokenData.refresh_token;
+
+    const response = await axios.post(
+      "https://oauth2.googleapis.com/token",
+      new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+      })
+    );
+
+    const { access_token } = response.data;
+
+    await supabase
+      .from("youtube_tokens")
+      .update({ access_token })
+      .eq("user_id", userId);
+
+    return access_token;
+  } catch (error: any) {
+    throw new Error(`Failed to refresh access token: ${error.message}`);
+  }
+};
+
 export const postComment = async (req: Request, res: Response) => {
   const { postId, comment } = req.body;
   const authHeader = req.headers.authorization;
@@ -117,8 +154,12 @@ export const postComment = async (req: Request, res: Response) => {
       "https://www.googleapis.com/youtube/v3/commentThreads",
       {
         snippet: {
-          parentId: postId,
-          textOriginal: comment
+          videoId: postId,
+          topLevelComment: {
+            snippet: {
+              textOriginal: comment,
+            },
+          },
         },
       },
       {

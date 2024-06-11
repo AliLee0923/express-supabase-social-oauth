@@ -117,12 +117,8 @@ export const postComment = async (req: Request, res: Response) => {
       "https://www.googleapis.com/youtube/v3/commentThreads",
       {
         snippet: {
-          videoId: postId,
-          topLevelComment: {
-            snippet: {
-              textOriginal: comment,
-            },
-          },
+          parentId: postId,
+          textOriginal: comment
         },
       },
       {

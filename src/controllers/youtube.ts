@@ -169,7 +169,6 @@ export const postComment = async (req: Request, res: Response) => {
         },
       }
     );
-
     res.status(200).send(response.data);
   } catch (error: any) {
     res.status(500).send(error.toString());

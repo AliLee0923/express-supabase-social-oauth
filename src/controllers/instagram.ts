@@ -80,8 +80,6 @@ export const handleInstagramCallback = async (req: Request, res: Response) => {
       throw new Error(error.message);
     }
 
-    // You should save these tokens in your database
-    // For now, we'll just redirect to the frontend with the tokens as query params
     res.redirect(`https://vite-vue-topaz-one.vercel.app/profile`);
   } catch (error: any) {
     res.status(500).send(error.toString());
